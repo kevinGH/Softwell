@@ -1,0 +1,134 @@
+﻿
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>播放元件</title>
+</head>
+<body bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" onload="Init();Connect();fnPlay();"
+    onunload="Exit();" oncontextmenu="return false;">
+    <form id="form1" runat="server">
+        <div>
+            <object classid="clsid:5220cb21-c88d-11cf-b347-00aa00a28331">
+                <param name="LPKPath" value="Softwell_demo.lpk">
+            </object>
+            <object id="Player" name="Player" height="240" width="320" classid="clsid:8133E1F6-06FC-4D12-9AE3-4ED0BC639D5C"
+                codebase="../DVRActiveXSetup.exe#version=1,0,1,5" events="True">
+            </object>
+        </div>
+        <div>
+            <input type=button name=btnConnect value="Connect" OnClick="Connect()">
+            <input type=button name=btnClose value="Disconnect" OnClick="Exit()"><br/>
+            <input type=button name=btnPlay value="Play" OnClick="fnPlay()">
+            <input type=button name=btnPause value="Pause" OnClick="fnPause()">
+            <input type=button name=btnRewind value="ReWind" OnClick="fnSetPlayRate(-1)">
+            <input type=button name=btnSetSpeed0n value="Speed-0.5" OnClick="fnSetPlayRate(-0.5)">
+            <input type=button name=btnSetSpeed1n value="Speed-1" OnClick="fnSetPlayRate(-1)">
+            <input type=button name=btnSetSpeed2n value="Speed-2" OnClick="fnSetPlayRate(-2)">
+            <input type=button name=btnSetSpeed4n value="Speed-4" OnClick="fnSetPlayRate(-4)">
+            <input type=button name=btnSetSpeed0 value="Speed0.5" OnClick="fnSetPlayRate(0.5)">
+            <input type=button name=btnSetSpeed1 value="Speed1" OnClick="fnSetPlayRate(1)">
+            <input type=button name=btnSetSpeed2 value="Speed2" OnClick="fnSetPlayRate(2)">
+            <input type=button name=btnSetSpeed4 value="Speed4" OnClick="fnSetPlayRate(4)">
+            <input type=button name=btnSnapshot value="Snapshot" OnClick="fnSnapshot()">
+        </div>
+    </form>
+</body>
+
+<script type="text/javascript">
+    //Basic 
+    var Hostname = "10.2.17.10";
+    var Hostport = "80";
+    var Username = "admin";
+    var Password = "admin";
+    var ChannelID = "0";
+    var DefaultDatetime = "20121205:140000";
+    var Codebase = "../DVRActiveXSetup.exe#version=1,0,1,5";
+    //UI
+    var PlayerWidth = "320";
+    var PlayerHeight = "240";
+    //Object
+    var Player;
+    //Other
+    var Speed = 0; // -4 -2 -1 -0.5 0 0.5 1 2 4
+    var bConnectServer = false;
+
+    function Init() {
+        Player = document.getElementById("Player");
+    }
+    function Connect() {
+        Player.DmxConnect(Hostname, Hostport, Username, Password, parseInt(ChannelID), DefaultDatetime, 0);
+        bConnectServer = true;
+    }
+    function fnPlay() {
+        Speed = 1;
+        Player.DmxPlay();
+    }
+    function fnPause() {
+        Speed = 0;
+        Player.DmxPause();
+    }
+    function fnStop() {
+        Speed = 0;
+        Player.DmxDisconnect();
+        bConnectServer = false;
+    }
+    function fnSetPlayRate(mPlayRate) {
+        Speed = mPlayRate;
+        var SpeedValue;
+
+        switch (mPlayRate) {
+            case -4:
+                SpeedValue = 4
+                break;
+            case -2:
+                SpeedValue = 2
+                break;
+            case -1:
+                SpeedValue = 1
+                break;
+            case -0.5:
+                SpeedValue = -2
+                break;
+            case 0:
+                SpeedValue = 0
+                break;
+            case 0.5:
+                SpeedValue = -2
+                break;
+            case 1:
+                SpeedValue = 1
+                break;
+            case 2:
+                SpeedValue = 2
+                break;
+            case 4:
+                SpeedValue = 4
+                break;
+        }
+
+        if (Speed == 0)
+            fnPlay();
+
+        if (mPlayRate < 0)
+            Player.DmxReverse();
+
+        Player.DmxSetSpeed(SpeedValue);
+    }
+    function fnSnapshot() {
+        Player.cam.DmxSnapshot("", 0);
+    }
+    function fnRecord() { }
+    function fnStopRecord() { }
+    function fnAddTag() { }
+    function fnListTag() { }
+
+    function ChangeSize() { }
+    function Exit() {
+        Player.DmxDisconnect();
+    }
+
+
+</script>
+
+</html>

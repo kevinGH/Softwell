@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>DvrRTSPClient Monitor test</title>
+<script language="Javascript">
+function connect()
+{
+	var cam = document.cam;
+	var frmDVR = document.frmTest;
+	//cam.DmxConnect(frmDVR.txHost.value , frmDVR.txPort.value , frmDVR.txName.value , frmDVR.txPassword.value ,-1, 0 , 0);
+cam.DmxConnect(frmDVR.txHost.value , frmDVR.txPort.value , frmDVR.txName.value , frmDVR.txPassword.value ,2, '20121205:140000' , 0);
+}
+function disconnect()
+{
+  document.cam.DmxDisconnect();
+}
+function play()
+{
+  document.cam.DmxPlay();
+}
+function pause()
+{
+  document.cam.DmxPause();
+}
+function filedlg()
+{
+  document.cam.DmxSearchDlg();
+}
+function Rewind()
+{
+  document.cam.DmxReverse();
+}
+function SetSpeed(speed)
+{
+  document.cam.DmxSetSpeed(speed);
+}
+function Snapshot()
+{
+  document.cam.DmxSnapshot("C:\\test.bmp", 0); 
+}
+
+</script>
+
+</head>
+<body>
+ <OBJECT CLASSID = "clsid:5220cb21-c88d-11cf-b347-00aa00a28331" >
+   <PARAM NAME="LPKPath" VALUE="Softwell_demo.lpk">
+</OBJECT>
+<form name="frmTest">
+Host:<input type=text name="txHost" value="10.2.17.10" style="width:200px;"><br/>
+Port:<input type=text name="txPort" value="80" style="width:200px;"><br/>
+Name:<input type=text name="txName" value="admin" style="width:200px;"><br/>
+Password:<input type=text name="txPassword" value="admin" style="width:200px;"><br/>
+<input type=button name=btnConnect value="Connect" OnClick="connect()">
+<input type=button name=btnClose value="Disconnect" OnClick="disconnect()"><br/>
+<input type=button name=btnPlay value="Play" OnClick="play()">
+<input type=button name=btnPause value="Pause" OnClick="pause()">
+<input type=button name=btnRewind value="ReWind" OnClick="Rewind()">
+<input type=button name=btnSetSpeed0 value="Speed0.5" OnClick="SetSpeed(-2)">
+<input type=button name=btnSetSpeed1 value="Speed1" OnClick="SetSpeed(1)">
+<input type=button name=btnSetSpeed2 value="Speed2" OnClick="SetSpeed(2)">
+<input type=button name=btnSetSpeed4 value="Speed4" OnClick="SetSpeed(4)">
+<input type=button name=btnSetSpeed8 value="Speed8" OnClick="SetSpeed(8)">
+<input type=button name=btnSnapshot value="Snapshot" OnClick="Snapshot()">
+<input type=button name=btnFile value="File" OnClick="filedlg()">
+</form>
+<OBJECT classid="clsid:8133E1F6-06FC-4D12-9AE3-4ED0BC639D5C"
+	CODEBASE="../DVRActiveXSetup.exe#version=1,0,1,5"
+       width="320" height="240" id="cam" events="True"> 
+</OBJECT>
+</body>
+</html>
+
